@@ -2,6 +2,7 @@
 // Admins can adjust all product specs, pricing, copy, and policy text here.
 
 export const IMAGES = {
+  logo: "https://media.base44.com/images/public/6a55868be391a8aabe957637/5f11d7556_ChatGPTImageJul13202605_27_22PM.png",
   hero: "https://media.base44.com/images/public/6a55868be391a8aabe957637/95bcea3b2_generated_51052c1a.png",
   studio: "https://media.base44.com/images/public/6a55868be391a8aabe957637/0d85d4946_generated_91ad5467.png",
   edge: "https://media.base44.com/images/public/6a55868be391a8aabe957637/0230812c4_generated_6cb229fd.png",
