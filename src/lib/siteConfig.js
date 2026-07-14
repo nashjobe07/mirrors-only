@@ -2,7 +2,15 @@
 // Admins can adjust all product specs, pricing, copy, and policy text here.
 
 export const IMAGES = {
+  // Primary logo asset (square source with white margins — cropped in-code).
   logo: "https://media.base44.com/images/public/6a55868be391a8aabe957637/5f11d7556_ChatGPTImageJul13202605_27_22PM.png",
+  // Variant slots — swap with transparent assets when final art is provided.
+  // logoLight: dark mark for light backgrounds (navigation).
+  logoLight: "https://media.base44.com/images/public/6a55868be391a8aabe957637/5f11d7556_ChatGPTImageJul13202605_27_22PM.png",
+  // logoDark: light mark for dark backgrounds (footer).
+  logoDark: "https://media.base44.com/images/public/6a55868be391a8aabe957637/5f11d7556_ChatGPTImageJul13202605_27_22PM.png",
+  // Icon-only mark (favicon / app icon).
+  favicon: "https://media.base44.com/images/public/6a55868be391a8aabe957637/6d4d9fb11_generated_image.png",
   hero: "https://media.base44.com/images/public/6a55868be391a8aabe957637/95bcea3b2_generated_51052c1a.png",
   studio: "https://media.base44.com/images/public/6a55868be391a8aabe957637/0d85d4946_generated_91ad5467.png",
   edge: "https://media.base44.com/images/public/6a55868be391a8aabe957637/0230812c4_generated_6cb229fd.png",

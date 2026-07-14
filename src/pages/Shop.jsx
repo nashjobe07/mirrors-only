@@ -212,7 +212,7 @@ export default function Shop() {
         </div>
       </div>
 
-      <div className="sticky top-16 z-30 border-b border-silver bg-white/90 backdrop-blur">
+      <div className="sticky top-[68px] z-30 border-b border-silver bg-white/90 backdrop-blur lg:top-20">
         <div className="mx-auto flex max-w-edge items-center gap-1 overflow-x-auto px-4 py-3 no-scrollbar sm:px-6 lg:px-10">
           {stepsToShow.map((s, i) => {
             const active = i === step;
