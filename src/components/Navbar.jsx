@@ -30,7 +30,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-silver/60 bg-white">
       <div className="mx-auto flex h-16 max-w-edge items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-        <Logo height={36} />
+        <Logo />
 
         <div className="flex items-center gap-2">
           <Link
