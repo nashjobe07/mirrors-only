@@ -1,40 +1,36 @@
 import { Link } from "react-router-dom";
-import { IMAGES } from "@/lib/siteConfig";
 
-// Visible logo heights.
-// Desktop header 80px → logo 52px; Mobile header 68px → logo 38px.
-const SIZES = {
-  nav: "h-[38px] lg:h-[52px]",
-  footer: "h-9 sm:h-11"
-};
+function MirrorMark({ className }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} fill="none" aria-hidden="true">
+      <rect x="6.5" y="3.5" width="19" height="25" rx="2.5" stroke="currentColor" strokeWidth="2" />
+      <path d="M10 7 L20 25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.45" />
+    </svg>
+  );
+}
 
-// Horizontal lockup aspect (width : height). The source asset ships as a square
-// with generous white margins; object-cover crops the vertical whitespace so
-// the mark fills the bar instead of reading as a small square thumbnail.
-// Non-destructive — no scaling distortion.
-const DEFAULT_ASPECT = "3.2 / 1";
-
-export default function Logo({ variant = "nav", className = "", aspect = DEFAULT_ASPECT }) {
+// Crisp, resolution-independent lockup built from the brand's own type and
+// palette — no raster asset, so it stays sharp at every size and has a
+// transparent background on both light (nav) and dark (footer) surfaces.
+export default function Logo({ variant = "nav", className = "" }) {
   const isFooter = variant === "footer";
-  const src = isFooter ? (IMAGES.logoDark || IMAGES.logo) : (IMAGES.logoLight || IMAGES.logo);
-  const sizeClass = SIZES[variant] || SIZES.nav;
+  const wordColor = isFooter ? "text-white" : "text-obsidian";
+  const tagColor = isFooter ? "text-white/45" : "text-slate-ink";
+  const wordSize = isFooter ? "text-xl sm:text-2xl" : "text-xl lg:text-[26px]";
+  const markSize = isFooter ? "h-8 w-8 sm:h-9 sm:w-9" : "h-8 w-8 lg:h-9 lg:w-9";
 
   return (
     <Link
       to="/"
-      className={`group inline-flex items-center ${className}`}
+      className={`group inline-flex items-center gap-2.5 ${className}`}
       aria-label="Mirrors Only home"
     >
-      <span
-        className={`relative block overflow-hidden ${sizeClass}`}
-        style={{ aspectRatio: aspect }}
-      >
-        <img
-          src={src}
-          alt="Mirrors Only — Delivery · Installation · Care"
-          draggable={false}
-          className="absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-300 group-hover:opacity-80"
-        />
+      <MirrorMark className={`${markSize} shrink-0 text-icy transition-opacity duration-300 group-hover:opacity-80`} />
+      <span className="flex flex-col leading-none">
+        <span className={`font-heading font-extrabold tracking-tight ${wordSize} ${wordColor} transition-opacity duration-300 group-hover:opacity-80`}>
+          Mirrors<span className="text-icy"> Only</span>
+        </span>
+        <span className={`measure-tag mt-1 ${tagColor}`}>Delivery · Installation · Care</span>
       </span>
     </Link>
   );
