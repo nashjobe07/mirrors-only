@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { IMAGES } from "@/lib/siteConfig";
 
 function MirrorMark({ className }) {
   return (
@@ -9,28 +10,32 @@ function MirrorMark({ className }) {
   );
 }
 
-// Crisp, resolution-independent lockup built from the brand's own type and
-// palette — no raster asset, so it stays sharp at every size and has a
-// transparent background on both light (nav) and dark (footer) surfaces.
 export default function Logo({ variant = "nav", className = "" }) {
-  const isFooter = variant === "footer";
-  const wordColor = isFooter ? "text-white" : "text-obsidian";
-  const tagColor = isFooter ? "text-white/45" : "text-slate-ink";
-  const wordSize = isFooter ? "text-xl sm:text-2xl" : "text-xl lg:text-[26px]";
-  const markSize = isFooter ? "h-8 w-8 sm:h-9 sm:w-9" : "h-8 w-8 lg:h-9 lg:w-9";
+  // Navigation (white header): use the brand logo image. The asset's white
+  // background blends into the white header, so no box or crop is needed —
+  // the mark scales to the header height without distortion.
+  if (variant === "nav") {
+    return (
+      <Link to="/" className={`group inline-flex items-center ${className}`} aria-label="Mirrors Only home">
+        <img
+          src={IMAGES.logo}
+          alt="Mirrors Only — Delivery · Installation · Care"
+          draggable={false}
+          className="h-[52px] w-auto object-contain transition-opacity duration-300 group-hover:opacity-80 lg:h-[66px]"
+        />
+      </Link>
+    );
+  }
 
+  // Footer (dark surface): crisp vector lockup — no raster white-box.
   return (
-    <Link
-      to="/"
-      className={`group inline-flex items-center gap-2.5 ${className}`}
-      aria-label="Mirrors Only home"
-    >
-      <MirrorMark className={`${markSize} shrink-0 text-icy transition-opacity duration-300 group-hover:opacity-80`} />
+    <Link to="/" className={`group inline-flex items-center gap-2.5 ${className}`} aria-label="Mirrors Only home">
+      <MirrorMark className="h-8 w-8 shrink-0 text-icy transition-opacity duration-300 group-hover:opacity-80 sm:h-9 sm:w-9" />
       <span className="flex flex-col leading-none">
-        <span className={`font-heading font-extrabold tracking-tight ${wordSize} ${wordColor} transition-opacity duration-300 group-hover:opacity-80`}>
-          Mirrors<span className="text-icy"> Only</span>
+        <span className="font-heading text-xl font-extrabold tracking-tight text-white transition-opacity duration-300 group-hover:opacity-80 sm:text-2xl">
+          MIRRORS<span className="text-icy"> ONLY</span>
         </span>
-        <span className={`measure-tag mt-1 ${tagColor}`}>Delivery · Installation · Care</span>
+        <span className="measure-tag mt-1 text-white/45">Delivery · Installation · Care</span>
       </span>
     </Link>
   );
