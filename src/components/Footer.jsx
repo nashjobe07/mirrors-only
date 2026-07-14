@@ -37,7 +37,7 @@ export default function Footer() {
       <div className="mx-auto max-w-edge px-4 py-16 sm:px-6 lg:px-10 lg:py-22">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <Logo light size="lg" />
+            <Logo light height={56} />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/55">
               Large frameless mirrors without the custom-glass confusion. Two sizes, three fulfillment
               options, professional installation across the {CONTACT.serviceRegion}.
