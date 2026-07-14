@@ -1,0 +1,60 @@
+{
+  "name": "GalleryProject",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "before_image": {
+      "type": "string"
+    },
+    "after_image": {
+      "type": "string"
+    },
+    "mirror_size": {
+      "type": "string",
+      "enum": [
+        "4x5",
+        "4x6"
+      ]
+    },
+    "orientation": {
+      "type": "string",
+      "enum": [
+        "vertical",
+        "horizontal"
+      ]
+    },
+    "city": {
+      "type": "string"
+    },
+    "application": {
+      "type": "string"
+    },
+    "num_mirrors": {
+      "type": "number",
+      "default": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "installation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "customer_review": {
+      "type": "string"
+    },
+    "published": {
+      "type": "boolean",
+      "default": false
+    },
+    "order_index": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

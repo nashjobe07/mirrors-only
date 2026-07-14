@@ -1,0 +1,44 @@
+{
+  "name": "ServiceAreaZip",
+  "type": "object",
+  "properties": {
+    "zip_code": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "surcharge"
+      ],
+      "default": "active"
+    },
+    "pickup_available": {
+      "type": "boolean",
+      "default": true
+    },
+    "delivery_available": {
+      "type": "boolean",
+      "default": true
+    },
+    "installation_available": {
+      "type": "boolean",
+      "default": true
+    },
+    "surcharge": {
+      "type": "number",
+      "default": 0
+    },
+    "delivery_days": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "zip_code",
+    "city"
+  ]
+}

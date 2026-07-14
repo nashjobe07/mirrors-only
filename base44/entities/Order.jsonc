@@ -1,0 +1,227 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "order_number": {
+      "type": "string"
+    },
+    "mirror_size": {
+      "type": "string",
+      "enum": [
+        "4x5",
+        "4x6"
+      ]
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "orientation": {
+      "type": "string",
+      "enum": [
+        "vertical",
+        "horizontal",
+        "not_sure"
+      ]
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "pickup",
+        "delivery",
+        "installation"
+      ]
+    },
+    "residential_commercial": {
+      "type": "string",
+      "enum": [
+        "residential",
+        "commercial"
+      ]
+    },
+    "property_type": {
+      "type": "string"
+    },
+    "installation_address": {
+      "type": "string"
+    },
+    "installation_floor": {
+      "type": "string"
+    },
+    "has_stairs": {
+      "type": "boolean"
+    },
+    "has_elevator": {
+      "type": "boolean"
+    },
+    "wall_width": {
+      "type": "string"
+    },
+    "wall_height": {
+      "type": "string"
+    },
+    "wall_material": {
+      "type": "string"
+    },
+    "baseboard_height": {
+      "type": "string"
+    },
+    "num_mirrors": {
+      "type": "number"
+    },
+    "installation_height": {
+      "type": "string"
+    },
+    "has_outlets": {
+      "type": "boolean"
+    },
+    "has_switches": {
+      "type": "boolean"
+    },
+    "has_trim": {
+      "type": "boolean"
+    },
+    "has_shelving": {
+      "type": "boolean"
+    },
+    "nearby_doors": {
+      "type": "string"
+    },
+    "nearby_windows": {
+      "type": "string"
+    },
+    "wall_equipment": {
+      "type": "string"
+    },
+    "existing_mirror_present": {
+      "type": "boolean"
+    },
+    "existing_mirror_removed": {
+      "type": "boolean"
+    },
+    "clear_access": {
+      "type": "boolean"
+    },
+    "appointment_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "appointment_window": {
+      "type": "string"
+    },
+    "additional_notes": {
+      "type": "string"
+    },
+    "photo_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "mobile_phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "billing_address": {
+      "type": "string"
+    },
+    "service_address": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "preferred_comm": {
+      "type": "string"
+    },
+    "referral_source": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "full",
+        "deposit",
+        "invoice"
+      ]
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "delivery_charge": {
+      "type": "number"
+    },
+    "installation_charge": {
+      "type": "number"
+    },
+    "surcharge": {
+      "type": "number"
+    },
+    "sales_tax": {
+      "type": "number"
+    },
+    "discount": {
+      "type": "number"
+    },
+    "promo_code": {
+      "type": "string"
+    },
+    "amount_paid": {
+      "type": "number"
+    },
+    "balance_due": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "default": "Order Received"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Deposit Paid",
+        "Paid",
+        "Invoiced",
+        "Refunded"
+      ],
+      "default": "Pending"
+    },
+    "agreement_version": {
+      "type": "string"
+    },
+    "agreement_accepted_at": {
+      "type": "string"
+    },
+    "assigned_delivery_employee": {
+      "type": "string"
+    },
+    "assigned_install_employee": {
+      "type": "string"
+    },
+    "internal_notes": {
+      "type": "string"
+    },
+    "lead_source": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "mirror_size",
+    "service_type"
+  ]
+}

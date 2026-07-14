@@ -1,0 +1,93 @@
+{
+  "name": "CommercialInquiry",
+  "type": "object",
+  "properties": {
+    "business_name": {
+      "type": "string"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_role": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "project_address": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string"
+    },
+    "num_mirrors": {
+      "type": "number"
+    },
+    "preferred_size": {
+      "type": "string"
+    },
+    "preferred_orientation": {
+      "type": "string"
+    },
+    "desired_completion_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "delivery",
+        "installation"
+      ]
+    },
+    "plans_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "wall_photos_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "access_info": {
+      "type": "string"
+    },
+    "has_stairs": {
+      "type": "boolean"
+    },
+    "has_elevator": {
+      "type": "boolean"
+    },
+    "loading_area": {
+      "type": "string"
+    },
+    "coi_required": {
+      "type": "boolean"
+    },
+    "gc_info": {
+      "type": "string"
+    },
+    "bid_deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "default": "New"
+    }
+  },
+  "required": [
+    "business_name",
+    "contact_name",
+    "email"
+  ]
+}

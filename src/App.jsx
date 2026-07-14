@@ -6,6 +6,21 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import { Toaster as SonnerToaster } from 'sonner';
+import { CartProvider } from '@/lib/cartContext';
+import Layout from '@/components/Layout';
+import Home from '@/pages/Home';
+import Shop from '@/pages/Shop';
+import Delivery from '@/pages/Delivery';
+import Installation from '@/pages/Installation';
+import Pickup from '@/pages/Pickup';
+import Commercial from '@/pages/Commercial';
+import HowItWorks from '@/pages/HowItWorks';
+import Gallery from '@/pages/Gallery';
+import ServiceArea from '@/pages/ServiceArea';
+import FAQs from '@/pages/FAQs';
+import Contact from '@/pages/Contact';
+import Policies from '@/pages/Policies';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -20,21 +35,23 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
-  }
-
-  // Render the main app
+  // Render the main app (public storefront)
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/delivery" element={<Delivery />} />
+        <Route path="/installation" element={<Installation />} />
+        <Route path="/pickup" element={<Pickup />} />
+        <Route path="/commercial" element={<Commercial />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/service-area" element={<ServiceArea />} />
+        <Route path="/faqs" element={<FAQs />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/policies/:key" element={<Policies />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
@@ -48,9 +65,12 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ScrollToTop />
-          <AuthenticatedApp />
+          <CartProvider>
+            <AuthenticatedApp />
+          </CartProvider>
         </Router>
         <Toaster />
+        <SonnerToaster position="bottom-right" toastOptions={{ style: { borderRadius: '2px', border: '1px solid #E2E8F0' } }} />
       </QueryClientProvider>
     </AuthProvider>
   )
