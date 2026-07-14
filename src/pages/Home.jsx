@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight, Check, Truck, PackageCheck, Wrench, ShieldCheck, Star,
   Dumbbell, Warehouse, Activity, Music, Flower, Swords, BedDouble, Shirt,
-  Scissors, Building2, Building, Ruler, Clock, MapPin, ChevronRight, ImageIcon
+  Scissors, Building2, Building, Ruler, Clock, MapPin, ImageIcon
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import {
@@ -51,67 +51,44 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-obsidian text-white">
       <div className="absolute inset-0">
-        <img src={IMAGES.hero} alt="Large frameless mirror in a minimalist garage gym" className="h-full w-full object-cover opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-obsidian/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/40" />
+        <img src={IMAGES.hero} alt="Large frameless mirror in a home gym" className="h-full w-full object-cover opacity-60" onError={(e) => { e.currentTarget.style.opacity = 0; }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-obsidian/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50" />
       </div>
 
-      <div className="relative mx-auto grid max-w-edge items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:py-28 lg:px-10">
-        <div>
+      <div className="relative mx-auto max-w-edge px-4 py-24 sm:px-6 lg:py-32 lg:px-10">
+        <div className="max-w-2xl">
           <div className="measure-tag flex items-center gap-2 text-icy">
             <span className="h-px w-6 bg-icy" /> Phoenix Metropolitan Area
           </div>
-          <h1 className="mt-4 font-heading text-[clamp(2.4rem,6vw,4.75rem)] font-extrabold leading-[0.98] tracking-tight">
-            Large Frameless Mirrors—<span className="text-icy">Delivered and Installed</span>
+          <h1 className="mt-5 font-heading text-[clamp(2.5rem,6.5vw,5.25rem)] font-extrabold leading-[0.98] tracking-tight">
+            Large Frameless Mirrors—<br className="hidden sm:block" /><span className="text-icy">Delivered and Installed</span>
           </h1>
-          <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-white/70">
+          <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-white/75">
             Choose a 4' × 5' or 4' × 6' mirror, then select pickup, local delivery, or professional
             installation throughout the Phoenix metropolitan area.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Btn to="/shop" variant="accent" size="lg">
               Shop Mirrors <ArrowRight className="h-4 w-4" />
             </Btn>
             <Btn to="/how-it-works" variant="darkOutline" size="lg">
-              See How It Works
+              See How It Works <ArrowRight className="h-4 w-4" />
             </Btn>
-          </div>
-
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
-            {[
-              { icon: PackageCheck, label: "Pickup Available" },
-              { icon: Truck, label: "Phoenix Metro Delivery" },
-              { icon: Wrench, label: "Professional Installation" }
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2 text-sm text-white/80">
-                <s.icon className="h-4 w-4 text-icy" /> {s.label}
-              </div>
-            ))}
           </div>
         </div>
 
-        {/* Dimension cards */}
-        <div className="hidden flex-col gap-4 lg:flex">
-          {["4x5", "4x6"].map((id) => {
-            const p = PRODUCTS[id];
-            return (
-              <Link
-                key={id}
-                to={`/shop?size=${id}`}
-                className="group relative overflow-hidden border border-white/15 bg-white/5 p-6 backdrop-blur-md transition-all hover:border-icy/60 hover:bg-white/10"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="measure-tag text-white/50">{p.sku}</span>
-                  <ChevronRight className="h-4 w-4 text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-icy" />
-                </div>
-                <p className="mt-2 font-heading text-2xl font-bold tracking-tight">{p.name}</p>
-                <p className="mt-1 text-3xl font-heading font-extrabold tracking-tight text-icy">
-                  {p.widthFt}' × {p.heightFt}' <span className="text-base font-medium text-white/50">/ {p.widthIn}" × {p.heightIn}"</span>
-                </p>
-                <p className="mt-2 text-sm text-white/55">From ${p.price}</p>
-              </Link>
-            );
-          })}
+        {/* Bottom feature bar */}
+        <div className="mt-14 flex flex-col gap-4 border-t border-white/15 pt-6 sm:flex-row sm:gap-8 lg:gap-10">
+          {[
+            { icon: PackageCheck, label: "Pickup Available" },
+            { icon: Truck, label: "Phoenix Metro Delivery" },
+            { icon: Wrench, label: "Professional Installation" }
+          ].map((s) => (
+            <div key={s.label} className="flex items-center gap-3 text-sm font-medium text-white">
+              <s.icon className="h-5 w-5 text-icy" /> {s.label}
+            </div>
+          ))}
         </div>
       </div>
     </section>

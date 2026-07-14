@@ -19,55 +19,20 @@ const NAV = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const location = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-nav border-b border-silver/60 shadow-[0_1px_0_rgba(0,0,0,0.04)]" : "bg-transparent"
-      }`}
-    >
+    <header className="sticky top-0 z-50 border-b border-silver/60 bg-white">
       <div className="mx-auto flex h-16 max-w-edge items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-        <Logo />
+        <Logo height={36} />
 
-        <nav className="hidden flex-1 items-center justify-center gap-5 xl:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`text-[12.5px] font-medium tracking-tight transition-colors hover:text-icy-dark ${
-                location.pathname === item.to ? "text-icy-dark" : "text-slate-ink"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-2.5 xl:flex">
-          <Btn to="/service-area" variant="outline" size="sm">
-            Check Delivery
-          </Btn>
-          <Btn to="/shop" variant="accent" size="sm">
-            Shop Mirrors
-          </Btn>
-        </div>
-
-        <div className="flex items-center gap-2 xl:hidden">
+        <div className="flex items-center gap-2">
           <Link
             to="/shop"
             aria-label="Cart"
@@ -87,12 +52,19 @@ export default function Navbar() {
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
+          <div className="hidden items-center gap-2.5 xl:flex">
+            <Btn to="/service-area" variant="outline" size="sm">
+              Check Delivery Availability
+            </Btn>
+            <Btn to="/shop" variant="accent" size="sm">
+              Shop Mirrors
+            </Btn>
+          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
-        <div className="glass-nav border-t border-silver/60 xl:hidden">
+        <div className="border-t border-silver/60 bg-white">
           <nav className="mx-auto grid max-w-edge gap-1 px-4 py-4 sm:px-6">
             {NAV.map((item) => (
               <Link
@@ -105,7 +77,7 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2 xl:hidden">
               <Btn to="/service-area" variant="outline" size="sm">
                 Check Delivery
               </Btn>
