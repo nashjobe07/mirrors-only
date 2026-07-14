@@ -36,6 +36,13 @@ export default function Shop() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [orderId, setOrderId] = useState(null);
+  const [prelaunch, setPrelaunch] = useState(false);
+
+  useEffect(() => {
+    base44.entities.SiteSetting.filter({ key: "global" })
+      .then((rows) => setPrelaunch(!!(rows && rows[0] && rows[0].prelaunch_mode)))
+      .catch(() => {});
+  }, []);
 
   const [form, setForm] = useState({
     mirror_size: params.get("size") === "4x6" ? "4x6" : "4x5",
@@ -170,11 +177,11 @@ export default function Shop() {
         sales_tax: pricing.tax,
         discount: pricing.multiDiscount,
         promo_code: form.promo_code,
-        amount_paid: form.payment_method === "invoice" ? 0 : form.payment_method === "deposit" ? Math.round(pricing.total * 0.5) : 0,
-        balance_due: form.payment_method === "full" ? pricing.total : form.payment_method === "deposit" ? Math.round(pricing.total * 0.5) : pricing.total,
+        amount_paid: prelaunch ? 0 : (form.payment_method === "invoice" ? 0 : form.payment_method === "deposit" ? Math.round(pricing.total * 0.5) : 0),
+        balance_due: prelaunch ? pricing.total : (form.payment_method === "full" ? pricing.total : form.payment_method === "deposit" ? Math.round(pricing.total * 0.5) : pricing.total),
         total: pricing.total,
-        status: "Order Received",
-        payment_status: form.payment_method === "invoice" ? "Invoiced" : "Pending",
+        status: prelaunch ? "Order Request Received" : "Order Received",
+        payment_status: prelaunch ? "Pending" : (form.payment_method === "invoice" ? "Invoiced" : "Pending"),
         agreement_version: "v1.0",
         agreement_accepted_at: new Date().toISOString(),
         lead_source: form.referral_source || "website"
@@ -183,7 +190,7 @@ export default function Shop() {
       setOrderId(created?.id || order_number);
       clear();
       setStep(stepsToShow.length - 1);
-      toast.success("Order placed!");
+      toast.success(prelaunch ? "Order request submitted!" : "Order placed!");
     } catch (err) {
       toast.error("Could not place order: " + (err?.message || "please try again."));
     } finally {
@@ -192,7 +199,7 @@ export default function Shop() {
   };
 
   if (orderId && curStep?.key === "confirm") {
-    return <Confirmation form={form} pricing={pricing} orderId={orderId} />;
+    return <Confirmation form={form} pricing={pricing} orderId={orderId} prelaunch={prelaunch} />;
   }
 
   return (
@@ -235,11 +242,11 @@ export default function Shop() {
           {curStep?.key === "service" && <ServiceStep form={form} set={set} />}
           {curStep?.key === "install" && <InstallStep form={form} set={set} />}
           {curStep?.key === "photos" && <PhotosStep form={form} set={set} />}
-          {curStep?.key === "schedule" && <ScheduleStep form={form} set={set} />}
+          {curStep?.key === "schedule" && <ScheduleStep form={form} set={set} prelaunch={prelaunch} />}
           {curStep?.key === "customer" && <CustomerStep form={form} set={set} />}
-          {curStep?.key === "payment" && <PaymentStep form={form} set={set} pricing={pricing} />}
+          {curStep?.key === "payment" && <PaymentStep form={form} set={set} pricing={pricing} prelaunch={prelaunch} />}
           {curStep?.key === "agreements" && <AgreementsStep form={form} set={set} />}
-          {curStep?.key === "confirm" && <ConfirmStep form={form} pricing={pricing} submitting={submitting} onSubmit={submitOrder} />}
+          {curStep?.key === "confirm" && <ConfirmStep form={form} pricing={pricing} submitting={submitting} onSubmit={submitOrder} prelaunch={prelaunch} />}
 
           {curStep?.key !== "confirm" && (
             <div className="mt-10 flex items-center justify-between border-t border-silver pt-6">
@@ -264,7 +271,7 @@ export default function Shop() {
               <Row label="Est. sales tax" value={`$${pricing.tax}`} />
             </div>
             <div className="mt-4 flex items-center justify-between border-t border-silver pt-4">
-              <span className="font-heading text-lg font-bold text-obsidian">Total</span>
+              <span className="font-heading text-lg font-bold text-obsidian">{prelaunch ? "Estimated total" : "Total"}</span>
               <span className="font-heading text-2xl font-extrabold text-obsidian">${pricing.total}</span>
             </div>
             <div className="mt-4 flex items-center gap-2 text-[12px] text-slate-ink">
@@ -493,7 +500,7 @@ function PhotosStep({ form, set }) {
   );
 }
 
-function ScheduleStep({ form, set }) {
+function ScheduleStep({ form, set, prelaunch }) {
   const today = new Date();
   const days = Array.from({ length: 21 }).map((_, i) => {
     const d = new Date(today);
@@ -504,7 +511,7 @@ function ScheduleStep({ form, set }) {
     <StepWrap title="Schedule your appointment" subtitle="Available windows depend on inventory, route, and installer availability.">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={LABEL}>Available dates (Tue–Sat)</label>
+          <label className={LABEL}>{prelaunch ? "Requested date — pending approval (Tue–Sat)" : "Available dates (Tue–Sat)"}</label>
           <div className="grid grid-cols-3 gap-2">
             {days.map((d) => {
               const iso = d.toISOString().slice(0, 10);
@@ -527,7 +534,7 @@ function ScheduleStep({ form, set }) {
           </div>
         </div>
       </div>
-      <p className="mt-4 text-[12px] text-slate-ink">Double-booking is prevented by live capacity. Final confirmation is sent after order review.</p>
+      <p className="mt-4 text-[12px] text-slate-ink">{prelaunch ? "Requested dates and windows are pending approval and are not confirmed until Mirrors Only reviews your request." : "Double-booking is prevented by live capacity. Final confirmation is sent after order review."}</p>
     </StepWrap>
   );
 }
@@ -551,13 +558,13 @@ function CustomerStep({ form, set }) {
   );
 }
 
-function PaymentStep({ form, set, pricing }) {
+function PaymentStep({ form, set, pricing, prelaunch }) {
   return (
-    <StepWrap title="Payment" subtitle="Choose how you'd like to pay. Secure online payment is finalized before your appointment.">
+    <StepWrap title="Payment" subtitle={prelaunch ? "No payment is taken now. Tell us your preferred payment method — payment is arranged only after Mirrors Only confirms your request." : "Choose how you'd like to pay. Secure online payment is finalized before your appointment."}>
       <div className="grid gap-3">
         {[
-          { v: "full", label: "Full online payment", note: `Pay $${pricing.total} now` },
-          { v: "deposit", label: "Deposit + balance", note: `50% deposit ($${Math.round(pricing.total * 0.5)}), balance due before appointment` },
+          { v: "full", label: "Full online payment", note: prelaunch ? `Estimated $${pricing.total} — arranged after confirmation` : `Pay $${pricing.total} now` },
+          { v: "deposit", label: "Deposit + balance", note: prelaunch ? `Estimated 50% deposit ($${Math.round(pricing.total * 0.5)}) — arranged after confirmation` : `50% deposit ($${Math.round(pricing.total * 0.5)}), balance due before appointment` },
           { v: "invoice", label: "Commercial invoice", note: "Net terms — for approved commercial accounts" }
         ].map((o) => (
           <button key={o.v} onClick={() => set("payment_method", o.v)} className={`flex items-center gap-4 border p-5 text-left transition-all ${form.payment_method === o.v ? "border-icy bg-icy/5 ring-1 ring-icy" : "border-silver hover:border-obsidian/30"}`}>
@@ -612,30 +619,30 @@ function AgreementsStep({ form, set }) {
   );
 }
 
-function ConfirmStep({ form, pricing, submitting, onSubmit }) {
+function ConfirmStep({ form, pricing, submitting, onSubmit, prelaunch }) {
   const p = PRODUCTS[form.mirror_size];
   return (
-    <StepWrap title="Review and place order" subtitle="Confirm the details below. You'll receive an order number and preparation instructions.">
+    <StepWrap title={prelaunch ? "Review and submit request" : "Review and place order"} subtitle={prelaunch ? "Confirm the details below. Submitting sends an order request — no payment is taken yet." : "Confirm the details below. You'll receive an order number and preparation instructions."}>
       <div className="border border-silver bg-lightgray p-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <Detail label="Mirror" value={`${p.name} × ${form.quantity}`} />
           <Detail label="Orientation" value={form.orientation} />
           <Detail label="Service" value={SERVICE_PRICING[form.service_type]?.label} />
-          <Detail label="Appointment" value={form.appointment_date ? `${form.appointment_date} · ${form.appointment_window}` : "—"} />
+          <Detail label={prelaunch ? "Requested appointment" : "Appointment"} value={form.appointment_date ? `${form.appointment_date} · ${form.appointment_window}${prelaunch ? " (pending approval)" : ""}` : "—"} />
           <Detail label="Name" value={`${form.first_name} ${form.last_name}`} />
           <Detail label="Contact" value={`${form.mobile_phone} · ${form.email}`} />
-          <Detail label="Total" value={`$${pricing.total}`} />
-          <Detail label="Payment" value={form.payment_method} />
+          <Detail label={prelaunch ? "Estimated total" : "Total"} value={`$${pricing.total}`} />
+          <Detail label="Payment" value={prelaunch ? `${form.payment_method} (arranged after confirmation)` : form.payment_method} />
         </div>
       </div>
       <Btn variant="accent" size="lg" onClick={onSubmit} disabled={submitting} className="mt-6 w-full">
-        {submitting ? "Placing order…" : "Place Order"}
+        {submitting ? (prelaunch ? "Submitting…" : "Placing order…") : prelaunch ? "Submit Order Request" : "Place Order"}
       </Btn>
     </StepWrap>
   );
 }
 
-function Confirmation({ form, pricing, orderId }) {
+function Confirmation({ form, pricing, orderId, prelaunch }) {
   const p = PRODUCTS[form.mirror_size];
   return (
     <div className="bg-white">
@@ -643,21 +650,32 @@ function Confirmation({ form, pricing, orderId }) {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-icy/15">
           <PartyPopper className="h-8 w-8 text-icy-dark" />
         </div>
-        <h1 className="mt-6 font-heading text-3xl font-extrabold tracking-tight text-obsidian sm:text-4xl">Order placed</h1>
-        <p className="mt-3 text-slate-ink">Thank you, {form.first_name || "there"}. Your order has been received.</p>
+        <h1 className="mt-6 font-heading text-3xl font-extrabold tracking-tight text-obsidian sm:text-4xl">{prelaunch ? "Order Request Received" : "Order placed"}</h1>
+        <p className="mt-3 text-slate-ink">Thank you, {form.first_name || "there"}. {prelaunch ? "Your order request has been received." : "Your order has been received."}</p>
         <div className="mt-8 border border-silver bg-lightgray p-6 text-left">
           <div className="grid gap-3 sm:grid-cols-2">
             <Detail label="Order number" value={orderId} />
             <Detail label="Mirror" value={`${p.name} × ${form.quantity}`} />
             <Detail label="Service" value={SERVICE_PRICING[form.service_type]?.label} />
-            <Detail label="Appointment" value={form.appointment_date ? `${form.appointment_date} · ${form.appointment_window}` : "To be confirmed"} />
-            <Detail label="Amount due" value={`$${pricing.total}`} />
-            <Detail label="Payment status" value="Pending — instructions to follow" />
+            <Detail label={prelaunch ? "Requested appointment" : "Appointment"} value={form.appointment_date ? `${form.appointment_date} · ${form.appointment_window}${prelaunch ? " (pending approval)" : ""}` : "To be confirmed"} />
+            <Detail label={prelaunch ? "Estimated amount due" : "Amount due"} value={`$${pricing.total}`} />
+            <Detail label="Payment status" value={prelaunch ? "No payment taken — pending confirmation" : "Pending — instructions to follow"} />
           </div>
         </div>
-        <p className="mt-6 text-[13px] text-slate-ink">
-          A confirmation and preparation instructions will be sent to {form.email || "your email"}. Keep your order number to manage your appointment.
-        </p>
+        {prelaunch && (
+          <div className="mt-6 border-l-2 border-icy bg-icy/5 p-4 text-left text-[13px] leading-relaxed text-slate-ink">
+            Your order request has been received. Mirrors Only will review product availability, service area, access information, pricing, photos, and requested scheduling. Your order is not final until it is confirmed by Mirrors Only and any required payment is completed.
+          </div>
+        )}
+        {prelaunch ? (
+          <p className="mt-6 text-[13px] text-slate-ink">
+            Mirrors Only will contact you to confirm your request and arrange any required payment. Keep your order number for reference.
+          </p>
+        ) : (
+          <p className="mt-6 text-[13px] text-slate-ink">
+            A confirmation and preparation instructions will be sent to {form.email || "your email"}. Keep your order number to manage your appointment.
+          </p>
+        )}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Btn to="/" variant="primary">Back to Home</Btn>
           <Btn to="/contact" variant="outline">Contact us</Btn>

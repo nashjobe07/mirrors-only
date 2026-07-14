@@ -1,0 +1,17 @@
+{
+  "name": "SiteSetting",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "default": "global"
+    },
+    "prelaunch_mode": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "key"
+  ]
+}
